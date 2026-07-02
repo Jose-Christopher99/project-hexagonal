@@ -42,7 +42,8 @@ public class SecurityConfiguration {
                 /*.authorizeHttpRequests(request -> request
                         .anyRequest().permitAll())*/
                 //DEFINIMOS SI VAMOS A USAR SESIONES O NO, EN ESTE CASO CON JWT NO LO HAREMOS
-                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(manager ->
+                        manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 //DEFINIMOS EL PROVEEDOR DE AUTENTICACION EL CUAL LO HEMOS DEFINIDO MEDIANTE UN METODO
                 .authenticationProvider(authenticationProvider())
                 /*ESTA LINEA ES PARA AGREGAR UN FILTRO ADICIONAL, JWT DEBE DE TENER SU PROPIO FILTRO, YA QUE
@@ -51,7 +52,6 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
     /*DEFINIMOS UN METODO DEL PROVEEDOR DE LA AUTENTICACION*/
     @Bean
     public AuthenticationProvider authenticationProvider() {

@@ -2,6 +2,7 @@ package com.hexa_system.controller;
 
 import com.hexa_system.aggregates.dto.SignInRequest;
 import com.hexa_system.aggregates.dto.SignInResponse;
+import com.hexa_system.aggregates.dto.VerificacionDTO;
 import com.hexa_system.ports.in.AuthServiceIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,10 @@ public class AuthController {
         return ResponseEntity.ok(authServiceIn.loginIn(request));
     }
 
+    @PostMapping("/verify")
+    public ResponseEntity<SignInResponse> verificarUsuario(@RequestBody VerificacionDTO dto) {
+        return ResponseEntity.ok(authServiceIn.verificarCodigoIn(dto));
+    }
     @PostMapping("/refresh")
     public ResponseEntity<SignInResponse> refresh(
             @RequestParam String refreshToken) {

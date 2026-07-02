@@ -2,6 +2,7 @@ package com.hexa_system.usecase;
 
 import com.hexa_system.aggregates.dto.SignInRequest;
 import com.hexa_system.aggregates.dto.SignInResponse;
+import com.hexa_system.aggregates.dto.VerificacionDTO;
 import com.hexa_system.ports.in.AuthServiceIn;
 import com.hexa_system.ports.out.AuthServiceOut;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,12 @@ public class AuthServiceImpl implements AuthServiceIn {
     @Override
     public SignInResponse loginIn(SignInRequest request) {
         SignInResponse response = authServiceOut.loginOut(request);
+        return response;
+    }
+
+    @Override
+    public SignInResponse verificarCodigoIn(VerificacionDTO dto) {
+        SignInResponse response = authServiceOut.verificarCodigoOut(dto);
         return response;
     }
 

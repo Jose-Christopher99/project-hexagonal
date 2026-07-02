@@ -2,8 +2,7 @@ package com.hexa_system.constants;
 
 public class Constants {
     public static final String[] PERMIT_ENDPOINTS = {
-            "/api/auth/login",
-            "/api/auth/refresh"
+            "/api/auth/**"
     };
 
     // ENDPOINTS SOLO PARA ADMINISTRADOR
