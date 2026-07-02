@@ -41,7 +41,7 @@ public class JwtServiceImpl implements JwtService {
         claims.put("isEnabled", true);
 
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + 60000 * 30); // 30 minutos
+        Date expiration = new Date(now.getTime() + 60000);
 
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
