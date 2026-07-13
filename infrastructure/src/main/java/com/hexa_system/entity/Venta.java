@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Table(name="orden_ventas")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Venta {

@@ -5,10 +5,11 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @MappedSuperclass
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
 public abstract class Usuario {
     @Column(nullable = false,name="tipo_doc",length =10)

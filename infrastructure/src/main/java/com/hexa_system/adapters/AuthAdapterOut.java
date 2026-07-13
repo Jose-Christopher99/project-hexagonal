@@ -41,7 +41,7 @@ public class AuthAdapterOut implements AuthServiceOut {
         String codigo= String.format("%06d", new Random().nextInt(999999));
         //ELIMINAMOS CODIGOS ANTERIORES DEL MISMO EMAIL
         codigoRepository.deleteByEmail(request.email());
-        //GUARDAR CODIGO EN BD CON EXPIRACION DE 1 MINUTO
+        //GUARDAR CODIGO EN BD CON EXPIRACION DE 2 MINUTO
         CodigoVerificacion verificacion = new CodigoVerificacion();
         verificacion.setEmail(request.email());
         verificacion.setCodigo(codigo);

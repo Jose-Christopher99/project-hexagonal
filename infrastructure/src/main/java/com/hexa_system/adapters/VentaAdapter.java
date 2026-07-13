@@ -45,13 +45,14 @@ public class VentaAdapter implements VentaServiceOut {
                 .orElseThrow(() -> new RuntimeException("Empleado no encontrado: " + dto.empleadoId()));
 
         //Creamos la venta
-        Venta venta = new Venta();
-        venta.setCliente(cliente);
-        venta.setEmpleado(empleado);
-        venta.setFecha_venta(LocalDate.now());
-        venta.setHora_venta(LocalTime.now());
-        venta.setEstadoPago("PENDIENTE");
-        venta.setTotal(BigDecimal.ZERO);
+        Venta venta = Venta.builder()
+                .cliente(cliente)
+                .empleado(empleado)
+                .fecha_venta(LocalDate.now())
+                .hora_venta(LocalTime.now())
+                .estadoPago("PENDIENTE")
+                .total(BigDecimal.ZERO)
+                .build();
         ventaRepository.save(venta);
 
         //Procesamos el detalle de la venta y el total
@@ -69,14 +70,16 @@ public class VentaAdapter implements VentaServiceOut {
             BigDecimal subTotal = producto.getPrecio()
                     .multiply(BigDecimal.valueOf(item.cantidad()));
 
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setVenta(venta);
-            detalle.setProductos(producto);
-            detalle.setCantidad(item.cantidad());
-            detalle.setPrecioUnitario(producto.getPrecio());
-            detalle.setSubTotal(subTotal);
+            DetalleVenta detalle = DetalleVenta.builder()
+                    .venta(venta)
+                    .productos(producto)
+                    .cantidad(item.cantidad())
+                    .precioUnitario(producto.getPrecio())
+                    .subTotal(subTotal)
+                    .build();
             detalles.add(detalle);
 
+            //DESCONTAMOS EL STOCK DEL PRODUCTO EN LA BASE DE DATOS
             producto.setStock(producto.getStock() - item.cantidad());
             productoRepository.save(producto);
             total = total.add(subTotal);
@@ -101,12 +104,13 @@ public class VentaAdapter implements VentaServiceOut {
             ventaRepository.save(venta);
 
             //Generamos el comprobante
-            Comprobante comprobante = new Comprobante();
-            comprobante.setVenta(venta);
-            comprobante.setTipo(dto.tipoComprobante());
-            comprobante.setNumeroComprobante(generarNumeroComprobante(dto.tipoComprobante()));
-            comprobante.setFechaEmision(LocalDate.now());
-            comprobante.setHoraEmision(LocalTime.now());
+            Comprobante comprobante = Comprobante.builder()
+                    .venta(venta)
+                    .tipo(dto.tipoComprobante())
+                    .numeroComprobante(generarNumeroComprobante(dto.tipoComprobante()))
+                    .fechaEmision(LocalDate.now())
+                    .horaEmision(LocalTime.now())
+                    .build();
             comprobanteRepository.save(comprobante);
 
             //Retornamos la venta realizada

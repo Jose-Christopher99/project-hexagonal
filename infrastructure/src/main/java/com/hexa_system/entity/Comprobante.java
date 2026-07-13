@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @Table(name="comprobantes")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comprobante {

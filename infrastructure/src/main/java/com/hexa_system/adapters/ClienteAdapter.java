@@ -35,33 +35,30 @@ public class ClienteAdapter implements ClienteServiceOut {
     @Override
     public ClienteDTO guardarClienteOut(ClienteDTO dto) {
         return clienteRepository.findByNumDoc(dto.numDoc())
-                .map(existente -> new ClienteDTO(
-                        existente.getId(),
-                        existente.getTipoDoc(),
-                        existente.getNumDoc(),
-                        existente.getNombre(),
-                        existente.getApellidoP(),
-                        existente.getApellidoM(),
-                        existente.getTelefono()
-                ))
+                .map(this::toDTO)//HACE REFERENCIA AL METODO PRIVADO
                 .orElseGet(()->{
-                    Cliente cliente = new Cliente();
-                    cliente.setTipoDoc(dto.tipoDoc());
-                    cliente.setNumDoc(dto.numDoc());
-                    cliente.setNombre(dto.nombre());
-                    cliente.setApellidoP(dto.apellidoP());
-                    cliente.setApellidoM(dto.apellidoM());
-                    cliente.setTelefono(dto.telefono());
+                    Cliente cliente = Cliente.builder()
+                            .tipoDoc(dto.tipoDoc())
+                            .numDoc(dto.numDoc())
+                            .nombre(dto.nombre())
+                            .apellidoP(dto.apellidoP())
+                            .apellidoM(dto.apellidoM())
+                            .telefono(dto.telefono())
+                            .build();
                     Cliente guardado= clienteRepository.save(cliente);
-                    return new ClienteDTO(
-                            guardado.getId(),
-                            guardado.getTipoDoc(),
-                            guardado.getNumDoc(),
-                            guardado.getNombre(),
-                            guardado.getApellidoP(),
-                            guardado.getApellidoM(),
-                            guardado.getTelefono()
-                    );
+                    return toDTO(guardado);
                 });
+    }
+
+    private ClienteDTO toDTO(Cliente cliente) {
+        return new ClienteDTO(
+                cliente.getId(),
+                cliente.getTipoDoc(),
+                cliente.getNumDoc(),
+                cliente.getNombre(),
+                cliente.getApellidoP(),
+                cliente.getApellidoM(),
+                cliente.getTelefono()
+        );
     }
 }

@@ -18,52 +18,32 @@ import java.util.List;
 public class EmpleadoAdapter implements EmpleadoServiceOut {
     private final EmpleadoRepository empleadoRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public EmpleadoResponseDTO crearEmpleadoOut(EmpleadoDTO empleadoDTO) {
         Rol rol = rolRepository.findByNombreRol(empleadoDTO.rol())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado en la base de datos"));
-        Empleado empleado = new Empleado(
-                null,
-                empleadoDTO.email(),
-                new BCryptPasswordEncoder().encode(empleadoDTO.password()),
-                rol,
-                empleadoDTO.tipoDoc(),
-                empleadoDTO.numDoc(),
-                empleadoDTO.nombre(),
-                empleadoDTO.apellidoP(),
-                empleadoDTO.apellidoM(),
-                empleadoDTO.telefono()
-        );
+        Empleado empleado = Empleado.builder()
+                .tipoDoc(empleadoDTO.tipoDoc())
+                .numDoc(empleadoDTO.numDoc())
+                .nombre(empleadoDTO.nombre())
+                .apellidoP(empleadoDTO.apellidoP())
+                .apellidoM(empleadoDTO.apellidoM())
+                .telefono(empleadoDTO.telefono())
+                .email(empleadoDTO.email())
+                .password(passwordEncoder.encode(empleadoDTO.password()))
+                .rol(rol)
+                .build();
         Empleado empleadoSave= empleadoRepository.save(empleado);
-        return new EmpleadoResponseDTO(
-                empleadoSave.getId(),
-                empleadoSave.getTipoDoc(),
-                empleadoSave.getNumDoc(),
-                empleadoSave.getNombre(),
-                empleadoSave.getApellidoP(),
-                empleadoSave.getApellidoM(),
-                empleadoSave.getTelefono(),
-                empleadoSave.getRol().getNombreRol(),
-                empleadoSave.getEmail()
-        );
+        return toDTO(empleadoSave);
     }
 
     @Override
     public List<EmpleadoResponseDTO> listarEmpleadoOut() {
         return empleadoRepository.findAll()
                 .stream()
-                .map(e -> new EmpleadoResponseDTO(
-                        e.getId(),
-                        e.getTipoDoc(),
-                        e.getNumDoc(),
-                        e.getNombre(),
-                        e.getApellidoP(),
-                        e.getApellidoM(),
-                        e.getTelefono(),
-                        e.getEmail(),
-                        e.getRol().getNombreRol()
-                ))
+                .map(this::toDTO)
                 .toList();
     }
 
@@ -81,21 +61,25 @@ public class EmpleadoAdapter implements EmpleadoServiceOut {
         empleado.setTelefono(empleadoDTO.telefono());
         empleado.setRol(rol);
         Empleado actualizarEmpleado= empleadoRepository.save(empleado);
-        return new EmpleadoResponseDTO(
-                actualizarEmpleado.getId(),
-                actualizarEmpleado.getTipoDoc(),
-                actualizarEmpleado.getNumDoc(),
-                actualizarEmpleado.getNombre(),
-                actualizarEmpleado.getApellidoP(),
-                actualizarEmpleado.getApellidoM(),
-                actualizarEmpleado.getTelefono(),
-                actualizarEmpleado.getRol().getNombreRol(),
-                actualizarEmpleado.getEmail()
-        );
+        return toDTO(actualizarEmpleado);
     }
 
     @Override
     public void eliminarEmpleadoOut(Long id) {
         empleadoRepository.deleteById(id);
+    }
+
+    private EmpleadoResponseDTO toDTO(Empleado empleado){
+        return new EmpleadoResponseDTO(
+                empleado.getId(),
+                empleado.getTipoDoc(),
+                empleado.getNumDoc(),
+                empleado.getNombre(),
+                empleado.getApellidoP(),
+                empleado.getApellidoM(),
+                empleado.getTelefono(),
+                empleado.getRol().getNombreRol(),
+                empleado.getEmail()
+        );
     }
 }

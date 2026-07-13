@@ -3,6 +3,7 @@ package com.hexa_system.entity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper=true)
 @Getter
 @Setter
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
 public class Empleado extends Usuario implements UserDetails {
     @Id
@@ -31,15 +32,15 @@ public class Empleado extends Usuario implements UserDetails {
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
-    public Empleado(Long id, String email, String password, Rol rol,
-                    String tipoDoc, String numDoc, String nombre,
-                    String apellidoP, String apellidoM, String telefono){
-        super(tipoDoc, numDoc, nombre, apellidoP, apellidoM, telefono);
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.rol=rol;
-    }
+//    public Empleado(Long id, String email, String password, Rol rol,
+//                    String tipoDoc, String numDoc, String nombre,
+//                    String apellidoP, String apellidoM, String telefono){
+//        super(tipoDoc, numDoc, nombre, apellidoP, apellidoM, telefono);
+//        this.id = id;
+//        this.email = email;
+//        this.password = password;
+//        this.rol=rol;
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
