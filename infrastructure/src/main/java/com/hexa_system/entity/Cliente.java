@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 public class Cliente extends Usuario {
+    //ESTA ANOTACION GENERA EL ID AUTOMATICAMENTE EN LA BD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
